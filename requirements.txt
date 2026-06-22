@@ -1,0 +1,22 @@
+# ---- LiveKit Agents (voice pipeline) ----
+livekit-agents==1.2.8
+livekit-plugins-deepgram==1.2.8        # STT (nova-3) + TTS (aura-2)
+livekit-plugins-google==1.2.8          # LLM (Gemini 2.5 Flash)
+livekit-plugins-silero==1.2.8          # VAD
+livekit-plugins-turn-detector==1.2.8   # multilingual end-of-turn model
+livekit-plugins-noise-cancellation==0.2.5
+livekit-api==1.0.5
+
+# ---- Photorealistic avatar (Beyond Presence). Needs BEY_API_KEY + BEY_AVATAR_ID ----
+livekit-plugins-bey==1.2.8
+
+# ---- Call summary ----
+google-genai==1.36.0
+
+# ---- FastAPI backend (token + read APIs) ----
+fastapi==0.115.6
+uvicorn[standard]==0.35.0
+pydantic==2.11.9
+
+# ---- Misc ----
+python-dotenv==1.1.1
