@@ -54,8 +54,10 @@ show it live. Double-booking is prevented at the database level.
 ```
 
 The frontend asks FastAPI for a token, joins the LiveKit room, and the agent
-worker auto-dispatches into that same room. See [FLOW.md](FLOW.md) for the call
-flow.
+worker is **explicitly dispatched** into that room. The token carries an agent
+dispatch request for the name `mykare-frontdesk`, which must match the worker's
+`WorkerOptions(agent_name="mykare-frontdesk")` in `agent.py`/`main.py` and the
+frontend's token route. See [FLOW.md](FLOW.md) for the call flow.
 
 ---
 
@@ -83,9 +85,9 @@ Required: `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, `LIVEKIT_URL`,
 `DEEPGRAM_API_KEY`, `GOOGLE_API_KEY`, `HF_TOKEN`
 ([get an HF token](https://huggingface.co/settings/tokens/new?tokenType=read)).
 
-Optional avatar: uncomment `livekit-plugins-bey` in `requirements.txt`, install
-it, and set `BEY_API_KEY` + `BEY_AVATAR_ID`. Without these the agent runs
-voice-only.
+Optional avatar: the `livekit-plugins-bey` package is already in
+`requirements.txt`. To enable the avatar, set `BEY_API_KEY` + `BEY_AVATAR_ID` in
+`.env`. Without those two vars the agent runs voice-only.
 
 ### 4. Download agent model files (one-time)
 ```bash
@@ -100,7 +102,9 @@ python main.py dev     # hot-reload for local dev
 # python main.py start # production
 ```
 `cli.run_app` reads `sys.argv`, so a LiveKit subcommand (`dev` / `start`) is
-required. Point the frontend at `http://localhost:8000` for tokens and APIs.
+required. The frontend reads summary/appointment data from `http://localhost:8000`
+(its `NEXT_PUBLIC_API_URL`); it can mint join tokens either here (`/api/token`) or
+via its own Next.js route — both request the `mykare-frontdesk` agent.
 
 > Prefer them apart? `python agent.py dev` runs the worker alone and
 > `uvicorn server:app --port 8000` runs the API alone.
@@ -125,7 +129,7 @@ required. Point the frontend at `http://localhost:8000` for tokens and APIs.
 - **appointments** — `id, phone, name, date, time, reason, status` with a unique
   index on `(date, time)` for active bookings → **no double-booking**
 - **call_summaries** — `room, phone, name, summary, intent, preferences,
-  appointments_json, created_at`
+  extracted_date, extracted_time, appointments_json, created_at`
 
 ---
 
