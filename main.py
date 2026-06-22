@@ -41,5 +41,8 @@ if __name__ == "__main__":
             entrypoint_fnc=entrypoint,
             prewarm_fnc=prewarm,
             agent_name="mykare-frontdesk",
+            # The turn-detector model can take >10s to load on a cold/slow start;
+            # give the inference + job subprocesses room so they aren't killed.
+            initialize_process_timeout=60,
         )
     )

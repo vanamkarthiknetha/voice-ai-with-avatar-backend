@@ -397,5 +397,6 @@ if __name__ == "__main__":
             entrypoint_fnc=entrypoint,
             prewarm_fnc=prewarm,
             agent_name="mykare-frontdesk",
+            initialize_process_timeout=60,
         )
     )
