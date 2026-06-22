@@ -271,7 +271,7 @@ class FrontDeskAgent(Agent):
         await self.session.say("Thank you for calling Mykare Health. Take care and goodbye!")
 
         await _finalize_call(self.session, state)
-        await state.ctx.shutdown("conversation ended by patient")
+        state.ctx.shutdown("conversation ended by patient")  # sync, not awaitable
         return None
 
 
